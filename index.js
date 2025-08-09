@@ -12,11 +12,9 @@ app.use(
   })
 );
 
-let autoWA = null;
+let autoWA = new AutoWA("session_name", { printQR: true });
 let isWAReady = false;
 const startWA = async () => {
-  autoWA = new AutoWA("session_name", { printQR: true });
-
   autoWA.on("connecting", () => {
     console.log("WA connecting!");
   });
@@ -47,6 +45,7 @@ app.route("/").all(async (req, res) => {
   const img = req.body?.img || req.query?.img;
   const video = req.body?.video || req.query?.video;
   const audio = req.body?.audio || req.query?.audio;
+  const sticker = req.body?.sticker || req.query?.sticker;
   const doc = req.body?.doc || req.query?.doc;
 
   if (!to) {
@@ -72,6 +71,11 @@ app.route("/").all(async (req, res) => {
     await autoWA.sendAudio({
       to,
       media: audio,
+    });
+  else if (sticker)
+    await autoWA.sendSticker({
+      to,
+      media: sticker,
     });
   else if (doc)
     await autoWA.sendDocument({
