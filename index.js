@@ -29,6 +29,12 @@ const startWA = async () => {
     isWAReady = false;
   });
 
+  autoWA.on("group-message-received", async (msg) => {
+    if (msg.key.fromMe && msg.text == "id") {
+      await msg.replyWithText(msg.from);
+    }
+  });
+
   // initialize session
   await autoWA.initialize();
 };
